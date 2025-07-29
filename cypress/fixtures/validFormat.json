@@ -1,0 +1,17 @@
+[
+  {
+    "email": "lusana2018.shakya@gmail.com",
+    "password": "Lusana@12345",
+    "description": "Valid credentials"
+  },
+  {
+    "email": "LUSANA2018.SHAKYA@GMAIL.COM",
+    "password": "Lusana@12345",
+    "description": "Uppercase email"
+  },
+  {
+    "email": "   lusana2018.shakya@gmail.com   ",
+    "password": "   Lusana@12345   ",
+    "description": "Email and password with spaces"
+  }
+]
