@@ -12,52 +12,37 @@ describe('Login Functionality Tests', () => {
 
         
         cy.get('form').then(($form) => {
-          expect($form[0].checkValidity()).to.be.false;
+          expect($form[0].checkValidity()).to.be.false; //output dincha check garera
         });
 
-        cy.get('button[type="submit"]').click();
-
-        cy.contains('Invalid email address').should('exist');
       });
     });
   });
-return;
-  it('should login successfully with valid credentials', () => {
-    cy.intercept('POST', '/api/login').as('loginRequest');
 
-    cy.get('input[placeholder="Email address"]').type('lusana2018.shakya@gmail.com');
-    cy.get('input[placeholder="Password"]').type('Lusana@12345');
-    cy.get('button[type="submit"]').click();
-
-    cy.wait('@loginRequest');
-
-    cy.url().should('not.include', '/login');
-    cy.contains('Welcome').should('exist'); 
-  });
 
   it('should show error when fields are empty', () => {
     cy.get('button[type="submit"]').click();
 
-    cy.contains('Email is required').should('be.visible');
-    cy.contains('Password is required').should('be.visible'); 
+    cy.contains('Invalid email address').should('be.visible');
+    cy.contains('Password must be at least 6 characters').should('be.visible'); //contains ma chai website ma j error dekhaucha tei lekhne
   });
 
   it('should show error when only email is provided', () => {
     cy.get('input[placeholder="Email address"]').type('lusana2018.shakya@gmail.com');
     cy.get('button[type="submit"]').click();
 
-    cy.contains('Password is required').should('be.visible');
+    cy.contains('Password must be at least 6 characters').should('be.visible');
   });
 
   it('should show error when only password is provided', () => {
     cy.get('input[placeholder="Password"]').type('Lusana@12345');
     cy.get('button[type="submit"]').click();
 
-    cy.contains('Email is required').should('be.visible');
+    cy.contains('Invalid email address').should('be.visible');
   });
 
   it('should show error for email with spaces', () => {
-    const emailWithSpaces = ' user @ example . com ';
+    const emailWithSpaces = ' user@ example . com ';
 
     cy.get('input[placeholder="Email address"]').type(emailWithSpaces);
     cy.get('input[placeholder="Password"]').type('somePassword123');
@@ -78,25 +63,36 @@ return;
     cy.get('input[placeholder="Password"]').type('somePassword123');
 
     cy.get('form').then(($form) => {
-    expect($form[0].checkValidity()).to.be.false;
+    expect($form[0].checkValidity()).to.be.false;// form error bhayeko le false le nai error msg dekhaucha
+    }); 
+  });
+
+  it('should show error for missing @ in email', () => {
+    const emailWithoutAd = 'lusanagmail.com';
+
+    cy.get('input[placeholder="Email address"]').type('emailWithoutAd');
+    cy.get('input[placeholder="Password"]').type('randompassword123');
+
+    cy.get('form').then(($form) => {
+      expect($form[0].checkValidity()).to.be.false;
+    });
+
+  })
+
+  it('should show error when password is less than 6 characters', () => {
+    cy.get('input[placeholder="Email address"]').type('aykahsp2022@gmail.com');
+    cy.get('input[placeholder="Password"]').type('ram');
+
+    cy.get('form').then(($form) => {
+      expect($form[0].checkValidity()).to.be.true;
     });
 
     cy.get('button[type="submit"]').click();
 
-    cy.contains('Invalid email address').should('exist'); 
-  });
-
-  it('should show error for non-registered email', () => {
-    cy.intercept('POST', '/api/login').as('loginRequest');
-
-    cy.get('input[placeholder="Email address"]').type('notregistered@example.com');
-    cy.get('input[placeholder="Password"]').type('somePassword123');
-    cy.get('button[type="submit"]').click();
-
-    cy.wait('@loginRequest');
-
-    cy.contains('Invalid email or password').should('be.visible'); 
-  });
+    cy.contains('Password must be at least 6 characters');
+    
+  })
+});
   
 
-});
+

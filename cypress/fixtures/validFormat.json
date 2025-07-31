@@ -1,17 +1,11 @@
 [
   {
-    "email": "lusana2018.shakya@gmail.com",
-    "password": "Lusana@12345",
-    "description": "Valid credentials"
+    "email": "aykahsp2022@gmail.com",
+    "password": "Aykahs@12345"
   },
   {
-    "email": "LUSANA2018.SHAKYA@GMAIL.COM",
-    "password": "Lusana@12345",
-    "description": "Uppercase email"
-  },
-  {
-    "email": "   lusana2018.shakya@gmail.com   ",
-    "password": "   Lusana@12345   ",
-    "description": "Email and password with spaces"
+    "email": "admin@sewaverse@gmail.com",
+    "password": "Sewa123"
   }
+
 ]

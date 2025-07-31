@@ -27,18 +27,32 @@
 // const, var, let
 // int, char a = 'a
 
+Cypress.Commands.add('validcredentials', (email, password) => {
+    cy.intercept('POST', '/api/auth/callback/credentials?').as('LoginRequest');
+    
+    cy.get('input[placeholder="Email address"]').clear().type(email);
+    cy.get('input[placeholder="Password"]').clear().type(password);
 
-Cypress.Commands.add('bypassLogin', ({ email, password }) => {
-    const emailEl = cy.get('main form div .space-y-2 input[placeholder="Email address"]')
-    const passwordEl = cy.get('main form div .space-y-2 input[placeholder="Password"]')
+    cy.get('form').then(($form) => {
+      expect($form[0].checkValidity()).to.be.true;
+    });
 
-    const logIn = cy.get('main form button[type="submit"]')
+    cy.get('button[type="submit"]').click();
 
-    emailEl.type(email)
-    passwordEl.type(password)
-    logIn.click()
-
-    // cy.url().should('include', '/dashboard')
-    emailEl.clear()
+    cy.wait('@LoginRequest').then((interception) => {
+      console.log(interception.response);
+      expect(interception.response.body.url).to.eq('https://qc.sewaverse.com/login');
+    })
 })
 
+Cypress.Commands.add('logout', () => {
+  cy.wait(10000);
+
+  cy.window().its('document.readyState').should('eq', 'complete');
+  cy.get('button[aria-haspopup="menu"]').first().click();
+  
+  cy.contains('button[type="submit"]', 'Log Out').filter(':visible').first().click();
+  cy.pause(3000);
+
+  // cy.url().should('eq','https://qc.sewaverse.com/login');
+});
